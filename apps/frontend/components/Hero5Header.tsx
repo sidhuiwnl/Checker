@@ -84,7 +84,7 @@ export const HeroHeader = () => {
                                 <SignedIn>
                                     <UserButton/>
                                     <Button asChild size="sm" className={cn(isScrolled ? "lg:inline-flex" : "hidden")}>
-                                        <Link href="#">
+                                        <Link href="/dashboard">
                                             <span>Get Strated</span>
                                         </Link>
                                     </Button>

@@ -59,6 +59,9 @@ app.get("/api/v1/websites",authMiddleware,async (req, res) => {
        where: {
            userId,
            disabled : false
+       },
+       include : {
+           websiteTick : true,
        }
    })
 
@@ -90,6 +93,6 @@ app.delete("/api/v1/websites",authMiddleware,async (req, res) => {
 
 })
 
-app.listen(3000, () => {
+app.listen(8000, () => {
     console.log("App listening on port 3000");
 })

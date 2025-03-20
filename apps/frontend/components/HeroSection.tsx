@@ -6,6 +6,7 @@ import Image from 'next/image'
 import {TextEffect} from "@/components/ui/text-effect";
 import {AnimatedGroup} from "@/components/ui/animate-group";
 import {HeroHeader} from "@/components/Hero5Header";
+import {LineShadowText} from "@/components/magicui/line-shadow-text";
 
 
 const transitionVariants = {
@@ -104,7 +105,8 @@ export default function HeroSection() {
                                     speedSegment={0.3}
                                     as="h1"
                                     className="mt-8 text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem]">
-                                    The most reliable uptime monitoring
+                                    The most reliable uptime
+                                    monitoring
                                 </TextEffect>
                                 <TextEffect
                                     per="line"
@@ -136,7 +138,7 @@ export default function HeroSection() {
                                             asChild
                                             size="lg"
                                             className="rounded-xl px-5 text-base">
-                                            <Link href="#link">
+                                            <Link href="/dashboard">
                                                 <span className="text-nowrap">Start Building</span>
                                             </Link>
                                         </Button>
