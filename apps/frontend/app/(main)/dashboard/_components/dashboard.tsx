@@ -1,62 +1,76 @@
-"use client"
+"use client";
 
-import React, { useState,useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import DashboardHeader from "@/app/(main)/dashboard/_components/dashboard-header";
 import MonitorItem from "@/app/(main)/dashboard/_components/monitor-item";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from "lucide-react";
 import useConnect from "@/hooks/useConnect";
 
+export type UptimeStatus = "good" | "bad" | "paused" | "unknown";
 
-type UptimeStatus = "good" | "bad" | "unknown";
-
-
+interface ProcessedWebsite {
+    id: string;
+    url: string;
+    status: UptimeStatus;
+    uptimePercentage: number;
+    lastChecked: string;
+    uptimeTicks: UptimeStatus[];
+}
 
 const DashboardPage = () => {
     const [isMonitorsExpanded, setIsMonitorsExpanded] = useState(true);
-    const {websites,connectBackend} = useConnect();
+    const { websites } = useConnect();
+
+    console.log(websites)
 
     const processedWebsites = useMemo(() => {
-        return websites.map(website  => {
-            // Sort ticks by creation time
-            const sortedTicks = [...website.websiteTick].sort((a, b) =>
-                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        return websites.map((website) => {
+            // Sort ticks by creation time (newest first)
+            const sortedTicks = [...website.websiteTick].sort(
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
             );
 
-            // Get the most recent 30 minutes of ticks
-            const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
-            const recentTicks = sortedTicks.filter(tick =>
-                new Date(tick.createdAt) > thirtyMinutesAgo
+            // Get ticks from the last 30 minutes
+            const thirtyMinutesAgo = Date.now() - 30 * 60 * 1000;
+            const recentTicks = sortedTicks.filter(
+                (tick) => new Date(tick.createdAt).getTime() > thirtyMinutesAgo
             );
 
-            // Aggregate ticks into 3-minute windows (10 windows total)
+            // Aggregate ticks into 3-minute windows (10 windows)
             const windows: UptimeStatus[] = [];
 
             for (let i = 0; i < 10; i++) {
-                const windowStart = new Date(Date.now() - (i + 1) * 3 * 60 * 1000);
-                const windowEnd = new Date(Date.now() - i * 3 * 60 * 1000);
+                const windowStart = Date.now() - (i + 1) * 3 * 60 * 1000;
+                const windowEnd = Date.now() - i * 3 * 60 * 1000;
 
-                const windowTicks = recentTicks.filter(tick => {
-                    const tickTime = new Date(tick.createdAt);
+                const windowTicks = recentTicks.filter((tick) => {
+                    const tickTime = new Date(tick.createdAt).getTime();
                     return tickTime >= windowStart && tickTime < windowEnd;
                 });
 
-                // Window is considered up if majority of ticks are up
-                const upTicks = windowTicks.filter(tick => tick.status === 'Good').length;
-                windows[9 - i] = windowTicks.length === 0 ? "unknown" : (upTicks / windowTicks.length) >= 0.5 ? "good" : "bad";
+                // Determine the window status
+                const upTicks = windowTicks.filter((tick) => tick.status === "GOOD").length;
+                windows[9 - i] =
+                    windowTicks.length === 0
+                        ? "unknown"
+                        : upTicks / windowTicks.length >= 0.5
+                            ? "good"
+                            : "bad";
             }
 
-            // Calculate overall status and uptime percentage
+            // Compute overall uptime percentage
             const totalTicks = sortedTicks.length;
-            const upTicks = sortedTicks.filter(tick => tick.status === 'Good').length;
-            const uptimePercentage = totalTicks === 0 ? 100 : (upTicks / totalTicks) * 100;
+            const upTicks = sortedTicks.filter((tick) => tick.status === "GOOD").length;
+            const uptimePercentage = totalTicks > 0 ? (upTicks / totalTicks) * 100 : 100;
 
             // Get the most recent status
-            const currentStatus = windows[windows.length - 1];
+            const currentStatus = windows[windows.length - 1] || "unknown";
 
-            // Format the last checked time
-            const lastChecked = sortedTicks[0]
-                ? new Date(sortedTicks[0].createdAt).toLocaleTimeString()
-                : 'Never';
+            // Format last checked time
+            const lastChecked =
+                sortedTicks.length > 0
+                    ? new Date(sortedTicks[0].createdAt).toLocaleTimeString()
+                    : "Never";
 
             return {
                 id: website.id,
@@ -69,6 +83,10 @@ const DashboardPage = () => {
         });
     }, [websites]);
 
+
+
+
+
     return (
         <div className="min-h-screen bg-[oklch(0.145_0_0)] text-white">
             <DashboardHeader />
@@ -78,39 +96,15 @@ const DashboardPage = () => {
                         className="flex items-center gap-2 px-6 py-4 border-b border-white/10 cursor-pointer"
                         onClick={() => setIsMonitorsExpanded(!isMonitorsExpanded)}
                     >
-                        <ChevronDown
-                            size={20}
-                            className={`transition-transform ${isMonitorsExpanded ? 'transform rotate-0' : 'transform -rotate-90'}`}
-                        />
+                        <ChevronDown size={20} className={`transition-transform ${isMonitorsExpanded ? "rotate-0" : "-rotate-90"}`} />
                         <h2 className="text-lg font-medium">Monitors</h2>
                     </div>
-
-                    {isMonitorsExpanded &&
-
-                        (
+                    {isMonitorsExpanded && (
                         <div className="divide-y divide-white/5">
-                            <MonitorItem
-                                name="endorsement-nine.vercel.app"
-                                status="up"
-                                time="3m"
-                                uptime="1d 3h 23m"
-                            />
-                            <MonitorItem
-                                name="api.example.com"
-                                status="down"
-                                time="28m"
-                            />
-                            <MonitorItem
-                                name="dashboard.example.com"
-                                status="up"
-                                time="5m"
-                                uptime="6d 14h 45m"
-                            />
-                            <MonitorItem
-                                name="auth.example.com"
-                                status="paused"
-                                time="1h"
-                            />
+                            {processedWebsites?.map(({ id, url, status, lastChecked,uptimeTicks }) => (
+
+                                <MonitorItem key={id} name={url} status={status} time={lastChecked} uptimeTicks={uptimeTicks}  />
+                            ))}
                         </div>
                     )}
                 </div>

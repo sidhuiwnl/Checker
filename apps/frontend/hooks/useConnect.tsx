@@ -30,7 +30,9 @@ export default function useConnect() {
             }
         })
 
-        setWebsites(response.data.data.websites);
+
+
+        setWebsites(response.data.data);
 
     }
     useEffect(() =>{

@@ -7,5 +7,10 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "@types/ws": "^8.18.0",
+    "ws": "^8.18.1"
   }
 }

@@ -1,15 +1,14 @@
 {
-  "name": "hub",
+  "name": "common",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
   },
+  "exports": {
+    "./types" : "./index.ts"
+  },
   "peerDependencies": {
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@types/ws": "^8.18.0",
-    "ws": "^8.18.1"
   }
 }

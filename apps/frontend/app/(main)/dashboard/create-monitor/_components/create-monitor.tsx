@@ -3,9 +3,29 @@
 import React from 'react';
 import {redirect} from "next/navigation";
 import { Button } from '@/components/ui/button';
+import {useState} from "react";
 import { ChevronDown, AlertCircle, HelpCircle } from 'lucide-react';
+import axios from "axios";
+import {BACKEND_URL} from "@/config";
+import {useAuth} from "@clerk/nextjs";
 
 const CreateMonitor = () => {
+    const { getToken } = useAuth();
+
+    const[websiteurl,setWebsiteurl] = useState('');
+
+
+    async function createMonitor() {
+        const token = await getToken();
+        await axios.post(`${BACKEND_URL}/api/v1/website`,{
+            websiteurl
+        },{
+            headers : {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+        redirect("/dashboard")
+    }
 
 
     return (
@@ -68,6 +88,10 @@ const CreateMonitor = () => {
 
                             <input
                                 type="text"
+                                value={websiteurl}
+                                onChange={(e) => {
+                                    setWebsiteurl(e.target.value);
+                                }}
                                 placeholder="https://"
                                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-primary"
                             />
@@ -92,7 +116,7 @@ const CreateMonitor = () => {
                             </Button>
                             <Button
                                 className="bg-primary hover:bg-primary/90"
-                                onClick={() => redirect('/dashboard')}
+                                onClick={createMonitor}
                             >
                                 Create monitor
                             </Button>

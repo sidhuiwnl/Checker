@@ -1,14 +1,19 @@
 import express from "express";
 import {authMiddleware} from "./middleware.ts";
 import {prismaClient} from "db/client";
+import cors from "cors"
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
 app.post("/api/v1/website",authMiddleware,async (req, res) => {
     const userId = req.userId!;
-    const { websiteurl }  = req.body;
+    const  { websiteurl }   = req.body;
+
+
 
     if(!userId || !websiteurl){
         res.status(403).send("Not logged in!");
@@ -55,7 +60,7 @@ app.get("/api/v1/websites",authMiddleware,async (req, res) => {
     const userId = req.userId!;
 
 
-   const websites = await prismaClient.website.findFirst({
+   const websites = await prismaClient.website.findMany({
        where: {
            userId,
            disabled : false
