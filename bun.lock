@@ -63,7 +63,10 @@
     "apps/hub": {
       "name": "hub",
       "dependencies": {
+        "@solana/web3.js": "^1.98.0",
         "@types/ws": "^8.18.0",
+        "tweetnacl": "^1.0.3",
+        "tweetnacl-util": "^0.15.1",
         "ws": "^8.18.1",
       },
       "devDependencies": {
@@ -78,6 +81,8 @@
       "dependencies": {
         "@solana/web3.js": "^1.98.0",
         "@types/ws": "^8.18.0",
+        "tweetnacl": "^1.0.3",
+        "tweetnacl-util": "^0.15.1",
         "ws": "^8.18.1",
       },
       "devDependencies": {
@@ -1569,6 +1574,10 @@
     "turbo-windows-arm64": ["turbo-windows-arm64@2.4.4", "", { "os": "win32", "cpu": "arm64" }, "sha512-403sqp9t5sx6YGEC32IfZTVWkRAixOQomGYB8kEc6ZD+//LirSxzeCHCnM8EmSXw7l57U1G+Fb0kxgTcKPU/Lg=="],
 
     "tw-animate-css": ["tw-animate-css@1.2.4", "", {}, "sha512-yt+HkJB41NAvOffe4NweJU6fLqAlVx/mBX6XmHRp15kq0JxTtOKaIw8pVSWM1Z+n2nXtyi7cW6C9f0WG/F/QAQ=="],
+
+    "tweetnacl": ["tweetnacl@1.0.3", "", {}, "sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw=="],
+
+    "tweetnacl-util": ["tweetnacl-util@0.15.1", "", {}, "sha512-RKJBIj8lySrShN4w6i/BonWp2Z/uxwC3h4y7xsRrpP59ZboCd0GpEVsOnMDYLMmKBpYhb5TgHzZXy7wTfYFBRw=="],
 
     "type-check": ["type-check@0.4.0", "", { "dependencies": { "prelude-ls": "^1.2.1" } }, "sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew=="],
 
