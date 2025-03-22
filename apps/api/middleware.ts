@@ -8,10 +8,11 @@ export async function authMiddleware(req: Request, res: Response,next: NextFunct
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        return res.status(401).json({
+        res.status(401).json({
             error: "No token provided,so Unauthorized",
 
         })
+        return;
     }
 
     const token = authHeader.split(' ')[1];
@@ -21,14 +22,15 @@ export async function authMiddleware(req: Request, res: Response,next: NextFunct
 
 
     if (!decoded) {
-        return res.status(401).json({
+        res.status(401).json({
             error: "No token provided,so Unauthorized",
         })
+        return;
     }
 
     req.userId  = decoded.sub as string;
 
-
+    console.log(req.userId);
     next()
 
 }
