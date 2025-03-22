@@ -103,7 +103,7 @@ const DashboardPage = () => {
                         <div className="divide-y divide-white/5">
                             {processedWebsites?.map(({ id, url, status, lastChecked,uptimeTicks }) => (
 
-                                <MonitorItem key={id} name={url} status={status} time={lastChecked} uptimeTicks={uptimeTicks}  />
+                                <MonitorItem key={id} name={url} status={status} time={lastChecked} uptimeTicks={uptimeTicks}   />
                             ))}
                         </div>
                     )}

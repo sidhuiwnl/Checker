@@ -17,6 +17,10 @@ export interface ValidateIncomingMessage {
     latency: number;
     websiteId: string;
     validatorId: string;
+    dataTransfer : number,
+    TLShandshake : number,
+    connection : number,
+    total : number,
 }
 
 export interface ValidateOutgoingMessage {

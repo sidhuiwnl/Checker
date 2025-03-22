@@ -4,6 +4,7 @@ import { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import nacl_util from "tweetnacl-util";
 import bs58 from "bs58";
+import {checker} from "./utils.ts";
 
 const CALLBACKS: {[callbackId: string]: (data: SignupOutgoingMessage) => void} = {}
 
@@ -53,10 +54,11 @@ async function validateHandler(ws: WebSocket, { url, callbackId, websiteId }: Va
     const signature = await signMessage(`Replying to ${callbackId}`, keypair);
 
     try {
-        const response = await fetch(url);
+        const { status,dataTransfer,TLShandshake,connection,total} : { status : number,dataTransfer: number,TLShandshake : number,connection : number,total : number} = await checker(url);
+
+
         const endTime = Date.now();
         const latency = endTime - startTime;
-        const status = response.status;
 
         console.log(url);
         console.log(status);
@@ -69,6 +71,10 @@ async function validateHandler(ws: WebSocket, { url, callbackId, websiteId }: Va
                 websiteId,
                 validatorId,
                 signedMessage: signature,
+                dataTransfer,
+                TLShandshake,
+                connection,
+                total
             },
         }));
     } catch (error) {

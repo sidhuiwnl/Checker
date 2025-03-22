@@ -13,7 +13,11 @@ interface Websites{
         id : string;
         createdAt : string;
         status : string;
-        latency : number
+        latency : number;
+        total : number;
+        tlsHandshake : number;
+        dataTransfer : number;
+        connection : number;
     }[];
 }
 
@@ -33,6 +37,8 @@ export default function useConnect() {
 
 
         setWebsites(response.data.data);
+
+        console.log(response.data.data);
 
     }
     useEffect(() =>{

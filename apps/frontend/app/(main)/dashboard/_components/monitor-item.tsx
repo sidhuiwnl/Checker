@@ -2,7 +2,7 @@ import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import MonitorTicks, { TickStatus } from "@/app/(main)/dashboard/_components/monitor-ticks";
 import { UptimeStatus } from "@/app/(main)/dashboard/_components/dashboard";
-
+import Link from "next/link";
 
 
 interface MonitorItemProps {
@@ -28,6 +28,7 @@ const MonitorItem: React.FC<MonitorItemProps> = ({ name, status, time, uptime,up
 
     return (
         <div className="flex flex-col py-4 px-6 hover:bg-white/5 transition-colors rounded-md">
+
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className={`${getStatusColor()} h-2.5 w-2.5 rounded-full`}></div>

@@ -123,7 +123,7 @@ setInterval(async () => {
 
             CALLBACKS[callbackId] = async (data: IncomingMessage) => {
                 if (data.type === 'validate') {
-                    const { validatorId, status, latency, signedMessage } = data.data;
+                    const { validatorId, status, latency, signedMessage,dataTransfer,TLShandshake,connection,total } = data.data;
                     const verified = await verifyMessage(
                         `Replying to ${callbackId}`,
                         validator.publicKey,
@@ -137,10 +137,14 @@ setInterval(async () => {
                         await tx.websiteTicksTable.create({
                             data: {
                                 websiteId: website.id,
-                                validatorId,
-                                status,
-                                latency,
+                                validatorId : validatorId,
+                                status : status,
+                                latency : latency,
                                 createdAt: new Date(),
+                                total : Number(total),
+                                tlsHandshake : Number(TLShandshake),
+                                connection : Number(connection),
+                                dataTransfer : Number(dataTransfer)
                             },
                         });
 
