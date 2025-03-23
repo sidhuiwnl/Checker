@@ -63,11 +63,11 @@ export async function checker (url : string){
     try {
         const metrics : any = await getInfo(url);
         const response = await fetch(url);
-        const status = await response.status
-        const total: number =  metrics.total.toFixed(1);
-        const connection : number =  metrics.connection.toFixed(1)
-        const TLShandshake : number = metrics.tls.toFixed(1);
-        const dataTransfer : number = metrics.dataTransfer.toFixed(1);
+        const status = await response.status;
+        const connection : number =  parseInt(metrics.connection.toFixed(1))
+        const TLShandshake : number = parseInt(metrics.tls.toFixed(1));
+        const dataTransfer : number = parseInt(metrics.dataTransfer.toFixed(1));
+        const total = connection + TLShandshake + dataTransfer
 
         return {
             total,

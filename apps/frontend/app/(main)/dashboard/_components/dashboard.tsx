@@ -5,6 +5,7 @@ import DashboardHeader from "@/app/(main)/dashboard/_components/dashboard-header
 import MonitorItem from "@/app/(main)/dashboard/_components/monitor-item";
 import { ChevronDown } from "lucide-react";
 import useConnect from "@/hooks/useConnect";
+import Link from "next/link";
 
 export type UptimeStatus = "good" | "bad" | "paused" | "unknown";
 
@@ -21,7 +22,6 @@ const DashboardPage = () => {
     const [isMonitorsExpanded, setIsMonitorsExpanded] = useState(true);
     const { websites } = useConnect();
 
-    console.log(websites)
 
     const processedWebsites = useMemo(() => {
         return websites.map((website) => {
@@ -102,8 +102,10 @@ const DashboardPage = () => {
                     {isMonitorsExpanded && (
                         <div className="divide-y divide-white/5">
                             {processedWebsites?.map(({ id, url, status, lastChecked,uptimeTicks }) => (
+                                <Link key={id} href={`/dashboard/${id}`}>
 
-                                <MonitorItem key={id} name={url} status={status} time={lastChecked} uptimeTicks={uptimeTicks}   />
+                                    <MonitorItem key={id} name={url} status={status} time={lastChecked} uptimeTicks={uptimeTicks}   />
+                                </Link>
                             ))}
                         </div>
                     )}

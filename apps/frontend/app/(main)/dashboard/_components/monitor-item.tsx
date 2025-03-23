@@ -2,7 +2,7 @@ import React from 'react';
 import { MoreHorizontal } from 'lucide-react';
 import MonitorTicks, { TickStatus } from "@/app/(main)/dashboard/_components/monitor-ticks";
 import { UptimeStatus } from "@/app/(main)/dashboard/_components/dashboard";
-import Link from "next/link";
+
 
 
 interface MonitorItemProps {
