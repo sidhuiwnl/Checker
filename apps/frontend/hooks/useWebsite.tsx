@@ -11,7 +11,7 @@ interface Website{
     websiteTick : {
         id : string;
         createdAt : string;
-        status : string;
+        status : "GOOD" | "BAD";
         latency : number;
         total : number;
         tlsHandshake : number;
