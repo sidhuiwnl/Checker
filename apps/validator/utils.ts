@@ -1,5 +1,5 @@
 import * as https from "node:https";
-import * as perf_hooks from "node:perf_hooks";
+import os from "os";
 
 const perfObserver = new PerformanceObserver((items) => {
     items.getEntries().forEach((entry) => {
@@ -86,4 +86,22 @@ export async function checker (url : string){
             status : 500,
         }
     }
+}
+
+export async function getIpDetails(ipAddress: string){
+    const response = await fetch(`https://ipinfo.io/${ipAddress}/json`);
+    return await response.json();
+}
+
+
+export function getLocalIpAddress() {
+    const interfaces = os.networkInterfaces();
+    for (const interfaceName in interfaces) {
+        for (const net of interfaces[interfaceName]!) {
+            if (net.family === "IPv4" && !net.internal) {
+                return net.address;
+            }
+        }
+    }
+    return "127.0.0.1"; // Fallback to localhost
 }

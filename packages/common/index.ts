@@ -1,18 +1,19 @@
 export interface SignupIncomingMessage {
     ip: string;
-    publicKey: string;
     signedMessage: string;
     callbackId: string;
+    location: string;
 }
 
 export interface SignupOutgoingMessage {
+    ip : string;
+    location : string;
     callbackId : string
     validatorId : string
 }
 
 export interface ValidateIncomingMessage {
     callbackId: string;
-    signedMessage: string;
     status: 'GOOD' | 'BAD';
     latency: number;
     websiteId: string;
@@ -44,3 +45,16 @@ export type OutgoingMessage = {
     type: 'validate'
     data: ValidateOutgoingMessage
 }
+
+export interface ValidationResult {
+    callbackId: string;
+    status: 'GOOD' | 'BAD';
+    latency: number;
+    websiteId: string;
+    validatorId: string | null;
+    dataTransfer?: number;
+    TLShandshake?: number;
+    connection?: number;
+    total?: number;
+}
+

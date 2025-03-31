@@ -29,7 +29,6 @@ model Website {
 
 model Validator {
   id          String              @id @default(uuid())
-  publickey   String
   location    String
   ip          String
   websiteTick WebsiteTicksTable[]

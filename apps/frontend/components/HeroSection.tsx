@@ -6,7 +6,7 @@ import Image from 'next/image'
 import {TextEffect} from "@/components/ui/text-effect";
 import {AnimatedGroup} from "@/components/ui/animate-group";
 import {HeroHeader} from "@/components/Hero5Header";
-import {LineShadowText} from "@/components/magicui/line-shadow-text";
+
 
 
 const transitionVariants = {
@@ -69,13 +69,7 @@ export default function HeroSection() {
                                 },
                             }}
                             className="absolute inset-0 -z-20">
-                            <Image
-                                src="https://res.cloudinary.com/dg4jhba5c/image/upload/v1741605538/night-background_ni3vqb.jpg"
-                                alt="background"
-                                className="absolute inset-x-0 top-56 -z-20 hidden lg:top-32 dark:block"
-                                width="3276"
-                                height="4095"
-                            />
+                            <></>
                         </AnimatedGroup>
                         <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"></div>
                         <div className="mx-auto max-w-7xl px-6">
@@ -115,7 +109,7 @@ export default function HeroSection() {
                                     delay={0.5}
                                     as="p"
                                     className="mx-auto mt-8 max-w-2xl text-balance text-lg">
-                                    Highly customizable components for building modern websites and applications that look and feel the way you mean it.
+                                    Highly customizable uptime monitoring solutions to ensure your websites and applications perform as expected.
                                 </TextEffect>
 
                                 <AnimatedGroup
@@ -177,7 +171,7 @@ export default function HeroSection() {
                                 <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
                                     <Image
                                         className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                                        src="/mail2.png"
+                                        src="/checker.png"
                                         alt="app screen"
                                         width="2700"
                                         height="1440"

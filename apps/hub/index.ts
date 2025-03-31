@@ -1,15 +1,19 @@
 import { randomUUIDv7, type ServerWebSocket } from "bun";
-import type { IncomingMessage, SignupIncomingMessage } from "common/types";
+import type {IncomingMessage, SignupIncomingMessage, ValidateIncomingMessage, ValidationResult} from "common/types";
 import { prismaClient } from "db/client";
 
 
-const availableValidators: { validatorId: string, socket: ServerWebSocket<unknown>, publicKey: string }[] = [];
 
-const CALLBACKS : { [callbackId: string]: (data: IncomingMessage) => void } = {}
+
+const availableValidators: { validatorId: string, socket: ServerWebSocket<unknown> }[] = [];
+
+
+
+const CALLBACKS = new Map<string,(data : ValidateIncomingMessage) => Promise<void>>();
 
 
 Bun.serve({
-    fetch(req, server) {
+    async fetch(req, server) {
         if (server.upgrade(req)) {
             return;
         }
@@ -20,12 +24,24 @@ Bun.serve({
         async message(ws: ServerWebSocket<unknown>, message: string) {
             const data: IncomingMessage = JSON.parse(message);
 
+            console.log("Received message", data);
+
             if (data.type === 'signup') {
                 await signupHandler(ws, data.data);
 
             } else if (data.type === 'validate') {
-                CALLBACKS[data.data.callbackId](data);
-                delete CALLBACKS[data.data.callbackId];
+                const callback = CALLBACKS.get(data.data.callbackId);
+
+                console.log("the callback data", callback);
+                if(callback){
+                    try{
+                        await callback(data.data);
+                    }finally {
+                        CALLBACKS.delete(data.data.callbackId);
+                    }
+
+
+                }
             }
         },
         async close(ws: ServerWebSocket<unknown>) {
@@ -34,10 +50,10 @@ Bun.serve({
     },
 });
 
-async function signupHandler(ws: ServerWebSocket<unknown>, { ip, publicKey, callbackId }: SignupIncomingMessage) {
+async function signupHandler(ws: ServerWebSocket<unknown>, { ip, callbackId,location }: SignupIncomingMessage) {
     const validatorDb = await prismaClient.validator.findFirst({
         where: {
-            publickey : publicKey,
+           ip
         },
     });
 
@@ -53,7 +69,6 @@ async function signupHandler(ws: ServerWebSocket<unknown>, { ip, publicKey, call
         availableValidators.push({
             validatorId: validatorDb.id,
             socket: ws,
-            publicKey: validatorDb.publickey,
         });
         return;
     }
@@ -62,8 +77,7 @@ async function signupHandler(ws: ServerWebSocket<unknown>, { ip, publicKey, call
     const validator = await prismaClient.validator.create({
         data: {
             ip,
-            publickey : publicKey,
-            location: 'unknown',
+            location
         },
     });
 
@@ -78,7 +92,6 @@ async function signupHandler(ws: ServerWebSocket<unknown>, { ip, publicKey, call
     availableValidators.push({
         validatorId: validator.id,
         socket: ws,
-        publicKey: validator.publickey,
     });
 }
 
@@ -94,8 +107,11 @@ setInterval(async () => {
     for (const website of websitesToMonitor) {
         console.log("The website receive",website)
         availableValidators.forEach(validator => {
+
+
             const callbackId = randomUUIDv7();
             console.log(`Sending validate to ${validator.validatorId} ${website.url}`);
+
             validator.socket.send(JSON.stringify({
                 type: 'validate',
                 data: {
@@ -104,30 +120,25 @@ setInterval(async () => {
                 },
             }));
 
-            CALLBACKS[callbackId] = async (data: IncomingMessage) => {
-                if (data.type === 'validate') {
-                    const { validatorId, status, latency,dataTransfer,TLShandshake,connection,total } = data.data;
+            CALLBACKS.set(callbackId, async (data) => {
+                const { validatorId, status, latency, dataTransfer, TLShandshake, connection, total } = data;
 
-                    console.log("The toatol",total)
+                console.log("The total", total);
 
-                        await prismaClient.websiteTicksTable.create({
-                            data: {
-                                websiteId: website.id,
-                                validatorId : validatorId,
-                                status : status,
-                                latency : latency,
-                                createdAt: new Date(),
-                                total : Number(total),
-                                tlsHandshake : Number(TLShandshake),
-                                connection : Number(connection),
-                                dataTransfer : Number(dataTransfer),
-
-                            }
-                        });
-
-
-                }
-            };
+                await prismaClient.websiteTicksTable.create({
+                    data: {
+                        websiteId: website.id,
+                        validatorId: validatorId,
+                        status: status,
+                        latency: latency,
+                        createdAt: new Date(),
+                        total: Number(total),
+                        tlsHandshake: Number(TLShandshake),
+                        connection: Number(connection),
+                        dataTransfer: Number(dataTransfer),
+                    }
+                });
+            });
         });
     }
 }, 60 * 1000);
