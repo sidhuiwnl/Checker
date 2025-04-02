@@ -1,9 +1,11 @@
-import DashboardPage from "@/app/(main)/dashboard/_components/dashboard";
+
+import  DashboardComponent  from "@/app/(main)/dashboard/_components/dashboard-page";
+
 
 export default function Dashboard() {
     return (
-        <div className="mt-30">
-            <DashboardPage/>
+        <div>
+            <DashboardComponent/>
         </div>
 
     )

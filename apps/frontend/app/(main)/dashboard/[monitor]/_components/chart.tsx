@@ -1,3 +1,4 @@
+"use client"
 
 import MetricLegend from "@/app/(main)/dashboard/[monitor]/_components/metric-legend";
 import {MetricType} from "@/app/(main)/dashboard/[monitor]/types";
@@ -5,6 +6,8 @@ import {useState} from "react";
 import PerformanceMetricsChart from "@/app/(main)/dashboard/[monitor]/_components/performance-metric-chart";
 import {MetricData} from "@/app/(main)/dashboard/[monitor]/types";
 import MetricsHeader from "@/app/(main)/dashboard/[monitor]/_components/metrics-header";
+
+
 
 
 type Props = {
@@ -23,6 +26,8 @@ const metricColors: Record<MetricType, string> = {
 
 
 export default function Chart({ chartData,url,status } : Props){
+
+
     const [activeMetrics, setActiveMetrics] = useState<MetricType[]>([
         "total",
         "latency",

@@ -5,7 +5,7 @@ import {useAuth} from "@clerk/nextjs";
 import {useEffect, useState} from "react";
 import {BACKEND_URL} from "@/config";
 
-interface Websites{
+export interface Websites{
     id : string;
     url : string;
     userId  : string;
@@ -38,7 +38,6 @@ export default function useConnect() {
 
         setWebsites(response.data.data);
 
-        console.log(response.data.data);
 
     }
     useEffect(() =>{

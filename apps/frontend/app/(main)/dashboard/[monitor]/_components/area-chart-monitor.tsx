@@ -1,20 +1,30 @@
-"use client"
+
 
 import useWebsite from "@/hooks/useWebsite";
 import  Chart  from "@/app/(main)/dashboard/[monitor]/_components/chart";
+import {useEffect,useState} from "react";
 
-import MetricsHeader from "@/app/(main)/dashboard/[monitor]/_components/metrics-header";
+
 
 type Props = {
-    monitor : string;
+    monitor : string | null;
 };
 
 export  function ChartParent({ monitor }: Props) {
-    const website  = useWebsite(monitor);
 
-    const status : "GOOD" | "BAD" | undefined = website?.websiteTick[website?.websiteTick.length - 1].status;
 
-    console.log(website?.websiteTick);
+
+    const website = useWebsite(monitor);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(true);
+        // Small delay to prevent flickering when data loads quickly
+        const timer = setTimeout(() => setIsLoading(false), 300);
+        return () => clearTimeout(timer);
+    }, [monitor]);
+
+    const status = website?.websiteTick[website?.websiteTick.length - 1]?.status;
 
     const chartData = website?.websiteTick.map(({
                                                     createdAt,
@@ -23,7 +33,6 @@ export  function ChartParent({ monitor }: Props) {
                                                     tlsHandshake,
                                                     dataTransfer,
                                                     connection,
-
                                                 }) => ({
         createdAt,
         total,
@@ -31,22 +40,26 @@ export  function ChartParent({ monitor }: Props) {
         tlsHandshake,
         dataTransfer,
         connection,
-
     }));
 
 
+    console.log("chartData", chartData);
 
-    return(
-        <div className="w-full h-screen p-6">
-            { chartData ? (
+
+
+    return (
+        <div className="w-full">
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : chartData ? (
                 <Chart
                     url={website?.url as string}
                     status={status!}
                     chartData={chartData}
                 />
             ) : (
-                <div>No data</div>
-            ) }
+                <div>No data available</div>
+            )}
         </div>
-    )
+    );
 }

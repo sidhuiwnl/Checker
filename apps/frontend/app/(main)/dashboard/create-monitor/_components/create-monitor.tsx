@@ -4,7 +4,7 @@ import React from 'react';
 import {redirect} from "next/navigation";
 import { Button } from '@/components/ui/button';
 import {useState} from "react";
-import { ChevronDown, AlertCircle, HelpCircle } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 import axios from "axios";
 import {BACKEND_URL} from "@/config";
 import {useAuth} from "@clerk/nextjs";
@@ -36,7 +36,7 @@ const CreateMonitor = () => {
 
             <main className="container mx-auto px-6 py-6 max-w-5xl animate-slide-up">
                 <div className="grid grid-cols-12 gap-8">
-                    {/* Left column */}
+
                     <div className="col-span-4">
                         <h2 className="text-xl font-medium mb-3">What to monitor</h2>
                         <p className="text-gray-400">
@@ -46,7 +46,6 @@ const CreateMonitor = () => {
                         </p>
                     </div>
 
-                    {/* Right column */}
                     <div className="col-span-8 space-y-6">
                         <div className="p-6 bg-white/5 rounded-lg border border-white/10">
                             <div className="flex items-center justify-between mb-6">
