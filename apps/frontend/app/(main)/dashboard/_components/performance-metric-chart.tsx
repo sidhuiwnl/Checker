@@ -217,29 +217,7 @@ const PerformanceMetricsChart = ({ data, activeMetrics, metricColors }: Performa
         <div className="flex flex-col h-full">
             <div className="flex justify-between mb-4">
                 <div className="flex flex-wrap gap-2">
-                    {activeMetrics.map(metric => (
-                        <div
-                            key={metric}
-                            className="flex items-center gap-1 px-2 py-1 rounded text-sm cursor-pointer"
-                            style={{
-                                backgroundColor: hexToRgba(metricColors[metric], selectedMetrics.includes(metric) ? 0.2 : 0.05),
-                                color: selectedMetrics.includes(metric) ? "#fff" : "#aaa",
-                                border: `1px solid ${hexToRgba(metricColors[metric], 0.3)}`
-                            }}
-                            onClick={() => {
-                                if (selectedMetrics.includes(metric)) {
-                                    if (selectedMetrics.length > 1) {
-                                        setSelectedMetrics(selectedMetrics.filter(m => m !== metric));
-                                    }
-                                } else {
-                                    setSelectedMetrics([...selectedMetrics, metric]);
-                                }
-                            }}
-                        >
-                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: metricColors[metric] }}></span>
-                            <span>{metric}</span>
-                        </div>
-                    ))}
+
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
