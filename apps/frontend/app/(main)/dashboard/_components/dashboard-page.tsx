@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import {ChartParent} from "@/app/(main)/dashboard/[monitor]/_components/area-chart-monitor";
+import {ChartParent} from "@/app/(main)/dashboard/_components/area-chart-monitor";
 import Link from "next/link";
 
 export default function DashboardComponent() {
@@ -50,7 +50,7 @@ export default function DashboardComponent() {
 
 
 
-    console.log("the current id",monitors ? monitors[activeMonitor]?.id : null)
+
 
 
 
@@ -111,7 +111,7 @@ export default function DashboardComponent() {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-xl font-medium hidden md:block">Monitors</h2>
                         <Link href={"/dashboard/create-monitor"}>
-                            <Button  className="bg-gradient-to-r  bg-neutral-900 text-white rounded-lg h-10 px-4 flex items-center gap-2 ml-auto shadow-lg shadow-indigo-900/20 border-0">
+                            <Button  className="bg-gradient-to-r hover:bg-neutral-900 bg-neutral-900 text-white rounded-lg h-10 px-4 flex items-center gap-2 ml-auto shadow-lg shadow-indigo-900/20 border-0">
                                 <Plus className="h-4 w-4" />
                                 <span>Create monitor</span>
                             </Button>

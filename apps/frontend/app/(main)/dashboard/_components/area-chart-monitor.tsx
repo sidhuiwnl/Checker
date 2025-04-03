@@ -1,9 +1,9 @@
 
 
 import useWebsite from "@/hooks/useWebsite";
-import  Chart  from "@/app/(main)/dashboard/[monitor]/_components/chart";
+import  Chart  from "@/app/(main)/dashboard/_components/chart";
 import {useEffect,useState} from "react";
-
+import {LoaderIcon} from "lucide-react";
 
 
 type Props = {
@@ -43,14 +43,16 @@ export  function ChartParent({ monitor }: Props) {
     }));
 
 
-    console.log("chartData", chartData);
+
 
 
 
     return (
         <div className="w-full">
             {isLoading ? (
-                <div>Loading...</div>
+                <div className="flex flex-col items-center animate-spin">
+                    <LoaderIcon />
+                </div>
             ) : chartData ? (
                 <Chart
                     url={website?.url as string}
@@ -58,7 +60,9 @@ export  function ChartParent({ monitor }: Props) {
                     chartData={chartData}
                 />
             ) : (
-                <div>No data available</div>
+                <div className="text-center">
+                    No data Available
+                </div>
             )}
         </div>
     );

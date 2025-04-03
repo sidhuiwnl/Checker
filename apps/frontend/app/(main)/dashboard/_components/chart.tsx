@@ -1,11 +1,10 @@
 "use client"
 
-import MetricLegend from "@/app/(main)/dashboard/[monitor]/_components/metric-legend";
-import {MetricType} from "@/app/(main)/dashboard/[monitor]/types";
+import MetricLegend from "@/app/(main)/dashboard/_components/metric-legend";
 import {useState} from "react";
-import PerformanceMetricsChart from "@/app/(main)/dashboard/[monitor]/_components/performance-metric-chart";
-import {MetricData} from "@/app/(main)/dashboard/[monitor]/types";
-import MetricsHeader from "@/app/(main)/dashboard/[monitor]/_components/metrics-header";
+import PerformanceMetricsChart from "@/app/(main)/dashboard/_components/performance-metric-chart";
+import {MetricData,MetricType} from "@/app/(main)/dashboard/types";
+import MetricsHeader from "@/app/(main)/dashboard/_components/metrics-header";
 
 
 
@@ -38,7 +37,7 @@ export default function Chart({ chartData,url,status } : Props){
 
     const toggleMetric = (metric: MetricType) => {
         if (activeMetrics.includes(metric)) {
-            // Don't allow deselecting if it's the last active metric
+
             if (activeMetrics.length === 1) return;
 
             setActiveMetrics(activeMetrics.filter((m) => m !== metric));

@@ -28,14 +28,16 @@ app.post("/api/v1/website",authMiddleware,async (req, res) => {
 
     res.status(200).json({
         status: "success",
-      id: data.id,
+        id: data.id,
     });
 
 
 })
 
 app.get("/api/v1/website/status",authMiddleware,async (req, res) => {
-    const websiteId  = req.params.websiteId;
+    const  websiteId    = req.query.websiteId as string;
+
+
     const userId = req.userId!;
 
     const data = await prismaClient.website.findFirst({

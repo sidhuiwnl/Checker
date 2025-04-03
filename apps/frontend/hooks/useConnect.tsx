@@ -55,6 +55,5 @@ export default function useConnect() {
 
     return {
         websites,
-        connectBackend
     }
 }

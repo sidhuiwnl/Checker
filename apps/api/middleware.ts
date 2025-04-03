@@ -30,7 +30,7 @@ export async function authMiddleware(req: Request, res: Response,next: NextFunct
 
     req.userId  = decoded.sub as string;
 
-    console.log(req.userId);
+
     next()
 
 }
