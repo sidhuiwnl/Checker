@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 0 0 5px 5px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .summary {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .monitor {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .status-good {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .status-warning {
+            color: #FF9800;
+            font-weight: bold;
+        }
+        .status-bad {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .metric {
+            width: 48%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Weekly Monitoring Report</h1>
+        <p>{{ startDate }} - {{ endDate }}</p>
+    </div>
+    <div class="content">
+        <p>Hello,</p>
+        <p>Here's your weekly summary of your monitored services:</p>
+
+        <div class="summary">
+            <h2>Overall Performance</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <p><strong>Monitors:</strong> {{ totalMonitors }}</p>
+                </div>
+                <div class="metric">
+                    <p><strong>Uptime:</strong> {{ overallUptime }}%</p>
+                </div>
+                <div class="metric">
+                    <p><strong>Alerts:</strong> {{ totalAlerts }}</p>
+                </div>
+                <div class="metric">
+                    <p><strong>Avg Response:</strong> {{ avgResponseTime }}ms</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Monitor Details</h2>
+
+        {{#each monitors}}
+            <div class="monitor">
+                <div class="monitor-header">
+                    <h3>{{ name }}</h3>
+                    {{#if isUp}}
+                        <span class="status-good">✅ UP</span>
+                    {{else}}
+                        <span class="status-bad">⚠️ DOWN</span>
+                    {{/if}}
+                </div>
+
+                <p><strong>URL:</strong> {{ url }}</p>
+
+                <div class="metrics">
+                    <div class="metric">
+                        <p><strong>Uptime:</strong> {{ uptime }}%</p>
+                    </div>
+                    <div class="metric">
+                        <p><strong>Avg Response:</strong> {{ avgResponseTime }}ms</p>
+                    </div>
+                    <div class="metric">
+                        <p><strong>Outages:</strong> {{ outages }}</p>
+                    </div>
+                    <div class="metric">
+                        <p><strong>Last Checked:</strong> {{ lastChecked }}</p>
+                    </div>
+                </div>
+
+                {{#if outages}}
+                    <p><strong>Outage Periods:</strong></p>
+                    <ul>
+                        {{#each outagePeriods}}
+                            <li>{{ start }} - {{ end }} ({{ duration }})</li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div>
+        {{/each}}
+
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="{{ dashboardUrl }}" class="button">View Full Report</a>
+        </p>
+    </div>
+    <div class="footer">
+        <p>This is an automated weekly report from your monitoring service.</p>
+        <p>© {{ currentYear }} Your Monitoring Service</p>
+    </div>
+</div>
+</body>
+</html>
