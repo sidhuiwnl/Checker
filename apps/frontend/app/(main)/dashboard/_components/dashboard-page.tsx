@@ -37,13 +37,23 @@ export default function DashboardComponent() {
 
             const lastCheck = sortedTicks[0] ?? null;
             const status = lastCheck && lastCheck.status === "GOOD" ? "online" : "offline";
+           const history = sortedTicks.slice(0, 10).map((tick) => (tick.status === "GOOD" ? 1 : 0))
+
+
+            const uptimePercentage = history.length > 0
+                //@ts-ignore
+                ? (history.reduce((a, b) => (a + b), 0) / history.length) * 100
+                : 0;
+
 
             return {
                 id,
                 url,
                 status,
                 lastChecked: lastCheck ? new Date(lastCheck.createdAt).toLocaleTimeString() : "N/A",
-                history: sortedTicks.slice(0, 10).map((tick) => (tick.status === "GOOD" ? 1 : 0)),
+                history,
+                uptimePercentage : uptimePercentage.toFixed(2) + "%",
+
             };
         })
         : [];
@@ -56,56 +66,11 @@ export default function DashboardComponent() {
 
 
 
+
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-black to-zinc-950 text-white flex flex-col">
+        <div className="w-full min-h-screen bg-gradient-to-b from-black to-zinc-950 text-white flex flex-col">
             <div className="container mx-auto px-4 py-8 max-w-7xl flex-1 flex flex-col md:flex-row gap-6">
-                <div className="md:w-64 shrink-0">
-                    <div className="sticky top-24">
-                        <div className="hidden md:flex flex-col gap-1 mb-6">
-                            <h1 className="text-2xl font-bold">Welcome back,</h1>
-                            <p className="text-zinc-400 font-medium">How are you today, Sidharth?</p>
-                        </div>
-
-                        <div className="bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-zinc-800/50 overflow-hidden mb-4 hidden md:block">
-                            <div className="p-3 flex flex-col gap-1">
-                                <Button variant="ghost" className="justify-start h-9 px-2 rounded-lg">
-                                    <div className="h-2 w-2 rounded-full bg-emerald-500 mr-2"></div>
-                                    Dashboard
-                                </Button>
-                                <Button variant="ghost" className="justify-start h-9 px-2 rounded-lg bg-zinc-800/50">
-                                    <div className="h-2 w-2 rounded-full bg-emerald-500 mr-2"></div>
-                                    Monitors
-                                </Button>
-                                <Button variant="ghost" className="justify-start h-9 px-2 rounded-lg">
-                                    <div className="h-2 w-2 rounded-full bg-emerald-500 mr-2"></div>
-                                    Alerts
-                                </Button>
-                                <Button variant="ghost" className="justify-start h-9 px-2 rounded-lg">
-                                    <div className="h-2 w-2 rounded-full bg-emerald-500 mr-2"></div>
-                                    Settings
-                                </Button>
-                            </div>
-                        </div>
-
-
-                        <div className="hidden md:block">
-                            <div className="flex items-center justify-between mb-2">
-                                <h2 className="text-sm font-medium text-zinc-400">QUICK STATS</h2>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-zinc-900/30 backdrop-blur-sm rounded-xl border border-zinc-800/50 p-3">
-                                    <div className="text-xs text-zinc-500 mb-1">Total Monitors</div>
-                                    <div className="text-xl font-semibold">{monitors.length}</div>
-                                </div>
-                                <div className="bg-zinc-900/30 backdrop-blur-sm rounded-xl border border-zinc-800/50 p-3">
-                                    <div className="text-xs text-zinc-500 mb-1">Uptime</div>
-                                    <div className="text-xl font-semibold">99.8%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-4">
@@ -219,7 +184,7 @@ export default function DashboardComponent() {
                             </div>
                             <div className="bg-zinc-800/30 rounded-lg p-3">
                                 <div className="text-xs text-zinc-500 mb-1">Uptime</div>
-                                <div className="text-sm font-medium">99.8%</div>
+                                <div className="text-sm font-medium">{monitors[activeMonitor]?.uptimePercentage}</div>
                             </div>
                         </div>
 

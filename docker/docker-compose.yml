@@ -19,7 +19,23 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-
+  app:
+    build: .
+    container_name: bullmq-app
+    restart: on-failure
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=mydatabase
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/usr/src/app
+    command: npm run dev
 
 volumes:
   postgres_data:

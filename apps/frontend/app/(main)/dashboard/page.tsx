@@ -4,9 +4,9 @@ import  DashboardComponent  from "@/app/(main)/dashboard/_components/dashboard-p
 
 export default function Dashboard() {
     return (
-        <div>
+        <>
             <DashboardComponent/>
-        </div>
+        </>
 
     )
 }

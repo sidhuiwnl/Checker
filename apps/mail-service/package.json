@@ -1,0 +1,16 @@
+{
+  "name": "mail-service",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "bullmq": "^5.47.1",
+    "redis": "^4.7.0",
+    "resend": "^4.2.0"
+  }
+}
