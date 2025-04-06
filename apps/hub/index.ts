@@ -100,8 +100,13 @@ async function signupHandler(ws: ServerWebSocket<unknown>, { ip, callbackId,loca
 setInterval(async () => {
     const websitesToMonitor = await prismaClient.website.findMany({
         where: {
+
             disabled: false,
         },
+        include:{
+            user : true,
+        }
+
     });
 
     for (const website of websitesToMonitor) {
@@ -116,7 +121,8 @@ setInterval(async () => {
                 type: 'validate',
                 data: {
                     url: website.url,
-                    callbackId
+                    callbackId,
+                    email : website.user.email,
                 },
             }));
 

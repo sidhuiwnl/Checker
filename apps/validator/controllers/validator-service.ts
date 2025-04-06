@@ -5,6 +5,7 @@ import {checker, getLocalIpAddress} from "../utils.ts";
 import type {SignupOutgoingMessage, OutgoingMessage, ValidateOutgoingMessage, ValidationResult} from "common/types";
 import {WS_URL} from "../constant.ts";
 
+
 export class Validator{
     private validatorId : string | null = null;
     private redisClient : RedisClientType | null = null;
@@ -155,6 +156,8 @@ export class Validator{
 
         try{
             const result= await checker(data.url);
+
+
             const latency = Date.now() - startTime;
 
             const  { status : _, ...rest } = result;

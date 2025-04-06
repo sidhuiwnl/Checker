@@ -28,6 +28,7 @@ export interface ValidateOutgoingMessage {
     url: string,
     callbackId: string,
     websiteId: string;
+    email : string;
 }
 
 export type IncomingMessage = {

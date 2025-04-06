@@ -14,9 +14,11 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id        String    @id @default(uuid())
   firstName String
   lastName  String
+  email     String    @unique
+  website   Website[]
 }
 
 model Website {
@@ -25,6 +27,7 @@ model Website {
   userId      String
   websiteTick WebsiteTicksTable[]
   disabled    Boolean             @default(false)
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Validator {

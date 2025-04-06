@@ -1,6 +1,12 @@
 import {Validator} from "./controllers/validator-service.ts";
 
-const validator = new Validator(process.env.REDIS_URL as string);
+
+const redisUrl = process.env.REDIS_URL as string
+
+
+
+
+const validator = new Validator(redisUrl);
 
 validator.start();
 
