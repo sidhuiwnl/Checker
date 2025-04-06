@@ -1,17 +1,31 @@
 "use client";
 
+import * as React from "react";
 import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    Legend,
-} from "recharts";
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import { MetricData, MetricType } from "@/app/(main)/dashboard/types";
 import { format, isToday, isYesterday, isThisWeek, isThisMonth } from "date-fns";
-import { useMemo, useState } from "react";
 
 type Props = {
     data: MetricData[];
@@ -27,9 +41,9 @@ export default function PerformanceMetricsChart({
                                                     activeMetrics,
                                                     metricColors,
                                                 }: Props) {
-    const [selectedFilter, setSelectedFilter] = useState<FilterOption>("Today");
+    const [selectedFilter, setSelectedFilter] = React.useState<FilterOption>("Today");
 
-    const filteredData = useMemo(() => {
+    const filteredData = React.useMemo(() => {
         return data.filter((item) => {
             const date = new Date(item.createdAt);
             switch (selectedFilter) {
@@ -47,66 +61,96 @@ export default function PerformanceMetricsChart({
         });
     }, [data, selectedFilter]);
 
-    const chartData = useMemo(() => {
+    const chartData = React.useMemo(() => {
         return filteredData.map((item) => ({
             ...item,
             createdAtLabel: format(new Date(item.createdAt), "MMM d, hh:mm a"),
         }));
     }, [filteredData]);
 
-    return (
-        <div className="relative w-full h-full">
-            {/* Dropdown */}
-            <div className="absolute top-2 right-2 z-10">
-                <select
-                    value={selectedFilter}
-                    onChange={(e) => setSelectedFilter(e.target.value as FilterOption)}
-                    className="bg-zinc-800 text-white text-sm px-3 py-1 rounded-md border border-zinc-700"
-                >
-                    {filterOptions.map((option) => (
-                        <option key={option} value={option}>
-                            {option}
-                        </option>
-                    ))}
-                </select>
-            </div>
+    // Create chart config based on active metrics
+    const chartConfig = React.useMemo(() => {
+        const config: ChartConfig = {};
+        activeMetrics.forEach((metric) => {
+            config[metric] = {
+                label: metric,
+                color: metricColors[metric],
+            };
+        });
+        return config;
+    }, [activeMetrics, metricColors]);
 
-            {/* Chart */}
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                    <XAxis
-                        dataKey="createdAtLabel"
-                        stroke="#ccc"
-                        tick={{ fill: "#aaa", fontSize: 12 }}
-                        angle={0}
-                        interval="preserveStartEnd"
-                    />
-                    <YAxis
-                        stroke="#ccc"
-                        tick={{ fill: "#aaa", fontSize: 12 }}
-                        tickFormatter={(value) => `${value} ms`}
-                    />
-                    <Tooltip
-                        contentStyle={{
-                            backgroundColor: "#1F2937",
-                            border: "none",
-                            color: "#fff",
-                        }}
-                        labelStyle={{ color: "#fff" }}
-                        formatter={(value: number, name: string) => [`${value} ms`, name]}
-                    />
-                    {activeMetrics.map((metric) => (
-                        <Line
-                            key={metric}
-                            type="monotone"
-                            dataKey={metric}
-                            stroke={metricColors[metric]}
-                            dot={false}
-                            strokeWidth={2}
+    return (
+        <Card>
+            <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+                <div className="grid flex-1 gap-1 text-center sm:text-left">
+                    <CardTitle>Performance Metrics</CardTitle>
+                    <CardDescription>
+                        Showing performance metrics for {selectedFilter.toLowerCase()}
+                    </CardDescription>
+                </div>
+                <Select
+                    value={selectedFilter}
+                    onValueChange={(value) => setSelectedFilter(value as FilterOption)}
+                >
+                    <SelectTrigger className="w-[160px] rounded-lg sm:ml-auto">
+                        <SelectValue placeholder="Select time range" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                        {filterOptions.map((option) => (
+                            <SelectItem key={option} value={option} className="rounded-lg">
+                                {option}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </CardHeader>
+            <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+                <ChartContainer
+                    config={chartConfig}
+                    className="aspect-auto h-[250px] w-full"
+                >
+                    <LineChart data={chartData}>
+                        <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+                        <XAxis
+                            dataKey="createdAtLabel"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            minTickGap={32}
+                            tick={{ fill: "hsl(var(--muted-foreground))" }}
                         />
-                    ))}
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: "hsl(var(--muted-foreground))" }}
+                            tickFormatter={(value) => `${value} ms`}
+                        />
+                        <ChartTooltip
+                            cursor={false}
+                            content={
+                                <ChartTooltipContent
+                                    labelFormatter={(value) => value}
+                                    //@ts-ignore
+                                    valueFormatter={(value) => `${value} ms`}
+                                    indicator="dot"
+                                />
+                            }
+                        />
+                        {activeMetrics.map((metric) => (
+                            <Line
+                                key={metric}
+                                type="monotone"
+                                dataKey={metric}
+                                stroke={`var(--color-${metric})`}
+                                dot={false}
+                                strokeWidth={2}
+                            />
+                        ))}
+
+                    </LineChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
     );
 }
