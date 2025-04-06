@@ -59,15 +59,6 @@ export default function DashboardComponent() {
         : [];
 
 
-
-
-
-
-
-
-
-
-
     return (
         <div className="w-full min-h-screen bg-gradient-to-b from-black to-zinc-950 text-white flex flex-col">
             <div className="container mx-auto px-4 py-8 max-w-7xl flex-1 flex flex-col md:flex-row gap-6">
@@ -75,12 +66,7 @@ export default function DashboardComponent() {
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-xl font-medium hidden md:block">Monitors</h2>
-                        <Link href={"/dashboard/create-monitor"}>
-                            <Button  className="bg-gradient-to-r hover:bg-neutral-900 bg-neutral-900 text-white rounded-lg h-10 px-4 flex items-center gap-2 ml-auto shadow-lg shadow-indigo-900/20 border-0">
-                                <Plus className="h-4 w-4" />
-                                <span>Create monitor</span>
-                            </Button>
-                        </Link>
+
 
                     </div>
 

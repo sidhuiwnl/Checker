@@ -49,7 +49,7 @@ export default function Chart({ chartData,url,status } : Props){
     return(
         <div className="text-white p-4 md:p-8">
             <div className="max-w-7xl mx-auto">
-                <div className="mt-6 bg-neutral-950 rounded-xl p-4 md:p-6 border border-zinc-800 flex flex-col gap-4">
+                <div className="mt-6 bg-neutral-950  rounded-xl p-4 md:p-6 border border border-neutral-900 flex flex-col gap-4">
                     <MetricsHeader url={url} status={status} />
                     <div className="h-[400px] mb-10">
                         <PerformanceMetricsChart

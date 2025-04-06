@@ -43,10 +43,6 @@ export  function ChartParent({ monitor }: Props) {
     }));
 
 
-
-
-
-
     return (
         <div className="w-full">
             {isLoading ? (
