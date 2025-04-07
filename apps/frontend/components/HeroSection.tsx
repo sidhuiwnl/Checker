@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Image from 'next/image'
 import {TextEffect} from "@/components/ui/text-effect";
 import {AnimatedGroup} from "@/components/ui/animate-group";
 import {HeroHeader} from "@/components/Hero5Header";
@@ -169,20 +168,14 @@ export default function HeroSection() {
                                     className="bg-linear-to-b to-background absolute inset-0 z-10 from-transparent from-35%"
                                 />
                                 <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
-                                    <Image
+                                    <img
                                         className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                                        src="/checker-bar.png"
+                                        src="/checker-1.png"
                                         alt="app screen"
-                                        width="2700"
-                                        height="1440"
+                                        width="1559"
+                                        height="982"
                                     />
-                                    <Image
-                                        className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
-                                        src="/mail2-light.png"
-                                        alt="app screen"
-                                        width="2700"
-                                        height="1440"
-                                    />
+
                                 </div>
                             </div>
                         </AnimatedGroup>

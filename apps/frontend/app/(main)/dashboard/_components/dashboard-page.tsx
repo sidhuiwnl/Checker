@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import {Plus, MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react"
+import {MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import useConnect from "@/hooks/useConnect";
 import {
@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import {ChartParent} from "@/app/(main)/dashboard/_components/area-chart-monitor";
-import Link from "next/link";
+
+import {ChartAreaInteractive} from "@/components/chart-area-interactive";
+import {SectionCards} from "@/components/section-cards";
 
 export default function DashboardComponent() {
     const [isMonitorsOpen, setIsMonitorsOpen] = useState(true)
@@ -24,6 +25,8 @@ export default function DashboardComponent() {
 
 
     const website = useConnect();
+
+
 
 
 
@@ -58,10 +61,12 @@ export default function DashboardComponent() {
         })
         : [];
 
+    console.log(monitors[activeMonitor]?.id)
+
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-b from-black to-zinc-950 text-white flex flex-col">
-            <div className="container mx-auto px-4 py-8 max-w-7xl flex-1 flex flex-col md:flex-row gap-6">
+        <div className=" text-white flex flex-col">
+            <div className="container mx-auto px-4  max-w-7xl flex-1 flex flex-col md:flex-row gap-6">
 
                 <div className="flex-1">
                     <div className="flex items-center justify-between mb-4">
@@ -148,45 +153,17 @@ export default function DashboardComponent() {
                         )}
                     </motion.div>
 
-                    <motion.div
-                        className="bg-zinc-900/30 backdrop-blur-sm rounded-xl border border-zinc-800/50 p-5"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 }}
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-medium">Monitor Details</h3>
-                            <div className="text-xs bg-emerald-500/20 text-emerald-500 px-2 py-1 rounded-full">Online</div>
-                        </div>
 
-                        <div className="grid md:grid-cols-3 gap-4 mb-4">
-                            <div className="bg-zinc-800/30 rounded-lg p-3">
-                                <div className="text-xs text-zinc-500 mb-1">URL</div>
-                                <div className="text-sm font-medium">{monitors[activeMonitor]?.url}</div>
-                            </div>
-                            <div className="bg-zinc-800/30 rounded-lg p-3">
-                                <div className="text-xs text-zinc-500 mb-1">Last Checked</div>
-                                <div className="text-sm font-medium">{monitors[activeMonitor]?.lastChecked}</div>
-                            </div>
-                            <div className="bg-zinc-800/30 rounded-lg p-3">
-                                <div className="text-xs text-zinc-500 mb-1">Uptime</div>
-                                <div className="text-sm font-medium">{monitors[activeMonitor]?.uptimePercentage}</div>
-                            </div>
-                        </div>
-
-
-
-                    </motion.div>
 
                 </div>
 
             </div>
-            <div className=" rounded-lg flex items-center justify-center h-[600px] w-full overflow-hidden">
-                <ChartParent
-                    key={monitors ? monitors[activeMonitor]?.id : "empty"}
-                    monitor={monitors ? monitors[activeMonitor]?.id : null}
-                />
+
+            <SectionCards/>
+            <div className="px-4 lg:px-6 mt-7">
+                <ChartAreaInteractive monitorId={monitors[activeMonitor]?.id} />
             </div>
+
         </div>
     )
 }
