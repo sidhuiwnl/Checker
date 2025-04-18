@@ -76,7 +76,7 @@ export default function DashboardComponent() {
                     </div>
 
                     <motion.div
-                        className="bg-zinc-900/30 backdrop-blur-sm rounded-xl border border-zinc-800/50 overflow-hidden mb-6"
+                        className="bg-neutral-950 backdrop-blur-sm rounded-xl border border-zinc-800/50 overflow-hidden mb-6"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
