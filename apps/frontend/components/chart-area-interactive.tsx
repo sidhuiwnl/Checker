@@ -31,8 +31,6 @@ import {
 } from "@/components/ui/toggle-group"
 import useWebsite from "@/hooks/useWebsite";
 
-
-
 const chartConfig = {
   visitors: {
     label: "Total",
@@ -70,7 +68,6 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
     }
   }, [isMobile])
 
-
   const formattedWebsiteChartData = React.useMemo(() => {
     if (!currentWebsiteChartData?.websiteTick) return [];
 
@@ -88,15 +85,24 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
     });
   }, [currentWebsiteChartData]);
 
-
-
-
   const filteredData = React.useMemo(() => {
     if (formattedWebsiteChartData.length === 0) return [];
 
     const today = new Date();
-    let daysToSubtract = 90;
 
+    if (timeRange === "Today") {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const todayData = formattedWebsiteChartData.filter(item => {
+        const itemDate = new Date(item.date);
+        return itemDate >= startOfToday;
+      });
+
+      // Return empty array if no data for today
+      return todayData;
+    }
+
+    let daysToSubtract = 90;
     if (timeRange === "30d") {
       daysToSubtract = 30;
     } else if (timeRange === "7d") {
@@ -118,9 +124,9 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
           <CardTitle>Website Performance</CardTitle>
           <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Connection and latency metrics for the last {timeRange === "90d" ? "3 months" : timeRange === "30d" ? "30 days" : "7 days"}
+            Connection and latency metrics for the last {timeRange === "90d" ? "3 months" : timeRange === "30d" ? "30 days" : timeRange === "7d" ? "7 days" : "24 hours"}
           </span>
-            <span className="@[540px]/card:hidden">Last {timeRange === "90d" ? "3 months" : timeRange === "30d" ? "30 days" : "7 days"}</span>
+            <span className="@[540px]/card:hidden">Last {timeRange === "90d" ? "3 months" : timeRange === "30d" ? "30 days" : timeRange === "7d" ? "7 days" : "24 hours"}</span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -133,6 +139,7 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
               <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
               <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
               <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+              <ToggleGroupItem value="Today">Today</ToggleGroupItem>
             </ToggleGroup>
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger
@@ -152,6 +159,9 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
                 <SelectItem value="7d" className="rounded-lg">
                   Last 7 days
                 </SelectItem>
+                <SelectItem value="Today" className="rounded-lg">
+                  Today
+                </SelectItem>
               </SelectContent>
             </Select>
           </CardAction>
@@ -161,101 +171,108 @@ export function ChartAreaInteractive({ monitorId } : { monitorId: string }) {
               config={chartConfig}
               className="aspect-auto h-[250px] w-full"
           >
-            <AreaChart data={filteredData.length > 0 ? filteredData : formattedWebsiteChartData}>
-              <defs>
-                <linearGradient id="fillConnection" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-connection)" stopOpacity={1.0} />
-                  <stop offset="95%" stopColor="var(--color-connection)" stopOpacity={0.1} />
-                </linearGradient>
+            { filteredData.length > 0 ? (
+                <AreaChart data={filteredData}>
+                  <defs>
+                    <linearGradient id="fillConnection" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-connection)" stopOpacity={1.0} />
+                      <stop offset="95%" stopColor="var(--color-connection)" stopOpacity={0.1} />
+                    </linearGradient>
 
-                <linearGradient id="fillLatency" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-latency)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-latency)" stopOpacity={0.1} />
-                </linearGradient>
+                    <linearGradient id="fillLatency" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-latency)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-latency)" stopOpacity={0.1} />
+                    </linearGradient>
 
-                <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-total)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-total)" stopOpacity={0.1} />
-                </linearGradient>
+                    <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-total)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-total)" stopOpacity={0.1} />
+                    </linearGradient>
 
-                <linearGradient id="fillDataTransfer" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-dataTransfer)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-dataTransfer)" stopOpacity={0.1} />
-                </linearGradient>
+                    <linearGradient id="fillDataTransfer" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-dataTransfer)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-dataTransfer)" stopOpacity={0.1} />
+                    </linearGradient>
 
-                <linearGradient id="fillTLSHandshake" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-tlsHandshake)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-tlsHandshake)" stopOpacity={0.1} />
-                </linearGradient>
-              </defs>
+                    <linearGradient id="fillTLSHandshake" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-tlsHandshake)" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="var(--color-tlsHandshake)" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
 
-              <CartesianGrid vertical={false} />
-              <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  minTickGap={32}
-                  tickFormatter={(value) => {
-                    const date = new Date(value)
-                    return date.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }}
-              />
-              <ChartTooltip
-                  cursor={false}
-                  defaultIndex={isMobile ? -1 : Math.min(10, formattedWebsiteChartData.length - 1)}
-                  content={
-                    <ChartTooltipContent
-                        labelFormatter={(value) => {
-                          return new Date(value).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })
-                        }}
-                        indicator="dot"
-                    />
-                  }
-              />
-              <Area
-                  dataKey="connection"
-                  type="natural"
-                  fill="url(#fillConnection)"
-                  stroke="var(--color-connection)"
-                  stackId="a"
-              />
-              <Area
-                  dataKey="latency"
-                  type="natural"
-                  fill="url(#fillLatency)"
-                  stroke="var(--color-latency)"
-                  stackId="b"
-              />
-              <Area
-                  dataKey="total"
-                  type="natural"
-                  fill="url(#fillTotal)"
-                  stroke="var(--color-total)"
-                  stackId="c"
-              />
-              <Area
-                  dataKey="dataTransfer"
-                  type="natural"
-                  fill="url(#fillDataTransfer)"
-                  stroke="var(--color-dataTransfer)"
-                  stackId="d"
-              />
-              <Area
-                  dataKey="tlsHandshake"
-                  type="natural"
-                  fill="url(#fillTLSHandshake)"
-                  stroke="var(--color-tlsHandshake)"
-                  stackId="e"
-              />
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                      dataKey="date"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      minTickGap={32}
+                      tickFormatter={(value) => {
+                        const date = new Date(value)
+                        return date.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      }}
+                  />
+                  <ChartTooltip
+                      cursor={false}
+                      defaultIndex={isMobile ? -1 : (filteredData.length > 0 ? Math.min(10, filteredData.length - 1) : undefined)}
+                      content={
+                        <ChartTooltipContent
+                            labelFormatter={(value) => {
+                              return new Date(value).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })
+                            }}
+                            indicator="dot"
+                        />
+                      }
+                  />
+                  <Area
+                      dataKey="connection"
+                      type="natural"
+                      fill="url(#fillConnection)"
+                      stroke="var(--color-connection)"
+                      stackId="a"
+                  />
+                  <Area
+                      dataKey="latency"
+                      type="natural"
+                      fill="url(#fillLatency)"
+                      stroke="var(--color-latency)"
+                      stackId="b"
+                  />
+                  <Area
+                      dataKey="total"
+                      type="natural"
+                      fill="url(#fillTotal)"
+                      stroke="var(--color-total)"
+                      stackId="c"
+                  />
+                  <Area
+                      dataKey="dataTransfer"
+                      type="natural"
+                      fill="url(#fillDataTransfer)"
+                      stroke="var(--color-dataTransfer)"
+                      stackId="d"
+                  />
+                  <Area
+                      dataKey="tlsHandshake"
+                      type="natural"
+                      fill="url(#fillTLSHandshake)"
+                      stroke="var(--color-tlsHandshake)"
+                      stackId="e"
+                  />
+                </AreaChart>
+            ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                <p className="text-lg text-muted-foreground">No data available for the selected time period</p>
+                </div>
+              )
+            }
 
-            </AreaChart>
           </ChartContainer>
         </CardContent>
       </Card>

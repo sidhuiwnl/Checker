@@ -17,7 +17,10 @@ export function SiteHeader({ pathname }: Props) {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <h1 className="text-base font-medium">{pathname.split("/")}</h1>
+        <h1 className="text-base font-medium">{pathname
+            .split("/")
+            .filter(Boolean)
+            .join(" > ")}</h1>
 
       </div>
     </header>
