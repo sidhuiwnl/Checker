@@ -159,7 +159,7 @@ export default function DashboardComponent() {
 
             </div>
 
-            <SectionCards/>
+            <SectionCards currentWebsiteId={monitors[activeMonitor]?.id} />
             <div className="px-4 lg:px-6 mt-7">
                 <ChartAreaInteractive monitorId={monitors[activeMonitor]?.id} />
             </div>

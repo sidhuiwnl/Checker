@@ -167,10 +167,10 @@ export default function HeroSection() {
                                     aria-hidden
                                     className="bg-linear-to-b to-background absolute inset-0 z-10 from-transparent from-35%"
                                 />
-                                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
+                                <div className=" border-none relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 ">
                                     <img
                                         className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                                        src="/checker-1.png"
+                                        src="./main.png"
                                         alt="app screen"
                                         width="1559"
                                         height="982"
